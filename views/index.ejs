@@ -43,13 +43,11 @@
                                 <span class="input-group-text" id="basic-addon1">123</span>
                                 <input v-model="number" name="number"
                                        id="numero" type="text"  class="form-control"  placeholder="Telefone" aria-label="Telefone" aria-describedby="basic-addon1">
-                            {{number}}
                             </div>
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon2">TXT</span>
                                 <input v-model="message" id="mensagem" name="message"
                                        type="text"  class="form-control"  placeholder="Sua mensagem" aria-label="Sua mensagem" aria-describedby="basic-addon1">
-                            {{message}}
                             </div>
                         </div>
                         <button @click="enviarmensagem"  class="btn btn-success">Enviar</button>
@@ -106,20 +104,21 @@
           console.log(e)
         }
       },
-      enviarmensagem: () => {
-        const payload = {number: this.number, message: this.message}
-        console.log(payload)
-          console.log(this.number)
-            // fetch(`${window.location.origin}/enviarmensagem`, {
-            //   method: 'POST',
-            //   body: JSON.stringify(payload)
-            // }).then(() => {
-            //   alert("mensagem enviada!");
-            // })
-            //   .catch((e) => {
-            //   alert('Falha ao enviar mensagem!')
-            //   console.log(e)
-            // } )
+      enviarmensagem() {
+        const payload = {number: 55+this.number, message: this.message}
+            fetch(`${window.location.origin}/enviarmensagem`, {
+              method: 'POST',
+              headers: {'Content-Type': 'application/json'},
+              body: JSON.stringify(payload)
+            }).then(() => {
+              alert("mensagem enviada!");
+              this.number = '';
+              this.message = '';
+            })
+              .catch((e) => {
+              alert('Falha ao enviar mensagem!')
+              console.log(e)
+            } )
       }
     },
     created(){
@@ -129,29 +128,6 @@
 
     }
   }).mount('#app')
-
-  // const enviarMensagem = async (e) => {
-  //  e.preventDefault()
-  //   let numero = document.getElementById('numero').value
-  //   let mensagem = document.getElementById('mensagem').value
-  //   const payload = {number: numero, message: mensagem}
-  //     fetch(`${window.location.origin}/enviarmensagem`, {
-  //       method: 'POST',
-  //       body: payload
-  //     }).then(() => {
-  //       alert("mensagem enviada!");
-  //       document.getElementById('numero').value = ""
-  //       document.getElementById('mensagem').value = ""
-  //     })
-  //       .catch((e) => {
-  //       alert('Falha ao enviar mensagem!')
-  //       console.log(e)
-  //     } )
-  //     console.log(payload)
-  //   document.getElementById('numero').value = ""
-  //   document.getElementById('mensagem').value = ""
-  // }
-
 
 </script>
 </body>

@@ -86,15 +86,23 @@ export const sendMessage = async (number: string, message: string, res: Response
     if (!atualClient) {
         return res.status(500).json({mensagem: 'Não ha uma conexão disponível'})
     }
-    if (number.length === 13 ) {
-        let newNumber = number.split('')
-        newNumber.splice(4, 1)
-        number = newNumber.join('')
+    if (!number || number.length < 12) {
+        return res.status(400).json({message: 'Numero de telefone inválido!'})
     }
+
     console.log(number)
     try {
+        let numberNoNine = '';
+        if (number.length === 13 ) {
+            let separateNumbers = number.split('')
+            separateNumbers.splice(4, 1)
+            numberNoNine = separateNumbers.join('')
+        }
         if (atualClient instanceof Whatsapp) {
-            const result = await atualClient.sendText(`${number}@c.us`, message)
+            const result = await atualClient.sendText(`${number}@c.us`, message);
+            if(numberNoNine.length) {
+                await atualClient.sendText(`${numberNoNine}@c.us`, message);
+            }
             console.log('Result: ', result);
             return res.json({message: 'mensagem enviada!'})
         }
