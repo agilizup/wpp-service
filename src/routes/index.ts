@@ -1,49 +1,49 @@
-import {Router} from "express";
-import {sendMessage} from "../bot";
-import {createSection, logout, getConnectionState} from "../bot";
-import {atualClient} from "../bot";
+import { Router } from 'express'
+import { sendMessage, currentClient } from '../bot'
+import { createSession, logout, getConnectionState } from '../bot'
+
 const routes = Router()
 
-routes.post('/enviarmensagem', (req, res) => {
-    const {number, message} = req.body;
-    sendMessage(number, message, res)
+routes.post('/send-message', (req, res) => {
+  const { phone, message } = req.body
+  sendMessage(phone, message, res)
 })
 
 routes.get('/start', (req, res) => {
-    const initial = () => {
-        createSection().then((response) => {
-            res.json({response})
-        }).catch((erro) => {
-            res.status(500).json(erro)
-        })
+  const initial = () => {
+    createSession().then((response) => {
+      res.json({ response })
+    }).catch((erro) => {
+      res.status(500).json(erro)
+    })
 
-    }
-    initial()
+  }
+  initial()
 })
 routes.get('/logout', (req, res) => {
-    const logoutWpp = () => {
-        logout().then((response) => {
-            res.json({response})
-        }).catch((erro) => {
-            res.status(500).json(erro)
-        })
+  const logoutWpp = () => {
+    logout().then((response) => {
+      res.json({ response })
+    }).catch((erro) => {
+      res.status(500).json(erro)
+    })
 
-    }
-    logoutWpp()
+  }
+  logoutWpp()
 })
 routes.get('/status', (req, res) => {
-    if (!atualClient) {
-        return res.status(500).json({data: 'não foi identificado uma conexão'})
-    }
-    const getStatus = () => {
-        getConnectionState(res).then((response) => {
-            res.json({response})
-        }).catch((erro) => {
-            res.status(500).json(erro)
-        })
+  if (!currentClient) {
+    return res.status(500).json({ data: 'não foi identificado uma conexão' })
+  }
+  const getStatus = () => {
+    getConnectionState(res).then((response) => {
+      res.json({ response })
+    }).catch((erro) => {
+      res.status(500).json(erro)
+    })
 
-    }
-    getStatus()
+  }
+  getStatus()
 })
 
 export default routes
