@@ -17,6 +17,10 @@ export const data = {
 export const createSession = async () => {
   try {
     const client = await create({
+      puppeteerOptions: {
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      },
       session: 'agilizone',
       catchQR: (base64Qrimg, asciiQR, attempts, urlCode) => {
         if (base64Qrimg) {
