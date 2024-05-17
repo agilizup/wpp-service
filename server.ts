@@ -3,7 +3,7 @@ import { Server } from 'socket.io'
 import app from './app'
 import { createSession, qrCodeBase64, sessionName, sessionStatus } from './src/bot'
 
-const port = process.env.PORT || 3004
+const port = process.env.PORT || 3014
 
 const server = http.createServer(app)
 export const io = new Server(server, {
