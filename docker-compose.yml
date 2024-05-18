@@ -1,12 +1,16 @@
-version: '3'
+version: '3.9'
 services:
   wpp-service:
     build:
       dockerfile: ./Dockerfile
       context: .
     ports:
+      - "3004:3004"
       - "80:3004"
+      - "443:3004"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+      - /usr/src/app/dist
+      - /usr/src/app/tokens
     restart: unless-stopped

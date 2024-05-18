@@ -4,9 +4,9 @@ import { createSession, logout, getConnectionState } from '../bot'
 
 const routes = Router()
 
-routes.post('/send-message', (req, res) => {
+routes.post('/send-message', async (req, res) => {
   const { phone, message } = req.body
-  sendMessage(phone, message, res)
+  await sendMessage(phone, message, res)
 })
 
 routes.get('/start', (req, res) => {
@@ -20,17 +20,19 @@ routes.get('/start', (req, res) => {
   }
   initial()
 })
-routes.get('/logout', (req, res) => {
-  const logoutWpp = () => {
-    logout().then((response) => {
-      res.json({ response })
-    }).catch((erro) => {
-      res.status(500).json(erro)
-    })
 
-  }
-  logoutWpp()
-})
+// routes.get('/logout', (req, res) => {
+//   const logoutWpp = () => {
+//     logout().then((response) => {
+//       res.json({ response })
+//     }).catch((erro) => {
+//       res.status(500).json(erro)
+//     })
+//
+//   }
+//   logoutWpp()
+// })
+
 routes.get('/status', (req, res) => {
   if (!currentClient) {
     return res.status(500).json({ data: 'não foi identificado uma conexão' })

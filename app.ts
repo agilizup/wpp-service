@@ -1,8 +1,7 @@
 import express from 'express'
 import cors from 'cors'
-import ejs from 'ejs'
-import { data } from './src/bot'
 import routes from './src/routes'
+// import { data } from './src/bot'
 
 const app = express()
 
@@ -14,9 +13,9 @@ app.set('views', './views')
 app.use('/files', express.static('public'))
 app.use(routes)
 
-app.get('/', (req, res) => {
-  res.render('index', data)
-})
+// app.get('/', (req, res) => {
+//   res.render('index', data)
+// })
 
 export default app
 

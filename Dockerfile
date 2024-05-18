@@ -1,5 +1,7 @@
 FROM node:18-alpine
 
+WORKDIR /usr/src/app
+
 # Installs latest Chromium (100) package.
 RUN apk add --no-cache \
       chromium \
@@ -21,17 +23,17 @@ RUN yarn add puppeteer@13.5.0
 RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
     && mkdir -p /home/pptruser/Downloads /app \
     && chown -R pptruser:pptruser /home/pptruser \
-    && chown -R pptruser:pptruser /app
-
-# Run everything after as non-privileged user.
-USER pptruser
-
-WORKDIR /usr/src/app
+    && chown -R pptruser:pptruser /usr/src/app
 
 COPY . .
 
 RUN yarn install --ignore-engines
 RUN yarn tsc
+
+RUN mkdir -p /usr/src/app/tokens
+RUN chown -R pptruser:pptruser /usr/src/app/tokens
+# Run everything after as non-privileged user.
+USER pptruser
 
 CMD [ "node", "dist/server.js" ]
 
