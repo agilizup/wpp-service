@@ -35,7 +35,7 @@ routes.get('/start', (req, res) => {
 
 routes.get('/status', (req, res) => {
   if (!currentClient) {
-    return res.status(500).json({ data: 'não foi identificado uma conexão' })
+    return res.status(500).json({ data: 'Not connected' })
   }
   const getStatus = () => {
     getConnectionState(res).then((response) => {

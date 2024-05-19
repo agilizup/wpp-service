@@ -91,32 +91,28 @@ export const getConnectionState = (res: Response) => {
 }
 
 export const sendMessage = async (number: string, message: string, res: Response) => {
-  if (!currentClient) {
-    return res.status(500).json({ mensagem: 'Não ha uma conexão disponível' })
+  const apiKey = process.env['WHATSAPP_SERVICE_API_KEY']
+
+  if (!res.req?.query?.apiKey || !apiKey || res.req?.query?.apiKey !== apiKey) {
+    return res.status(403).json({ message: 'Not authorized' })
   }
 
-  if (!number || number.length < 12) {
-    return res.status(400).json({ message: 'Numero de telefone inválido!' })
+  if (!currentClient) {
+    return res.status(400).json({ message: 'No available connection' })
+  }
+
+  if (!number || number.length < 11) {
+    return res.status(422).json({ message: 'Invalid phone number' })
   }
 
   try {
-    let numberNoNine = ''
-    if (number.length === 13) {
-      let separateNumbers = number.split('')
-      separateNumbers.splice(4, 1)
-      numberNoNine = separateNumbers.join('')
-    }
-
-    if (currentClient instanceof Whatsapp) {
-      const result = await currentClient.sendText(`${number}@c.us`, message)
-      if (numberNoNine.length) {
-        await currentClient.sendText(`${numberNoNine}@c.us`, message)
-      }
-      console.log('Result: ', result)
-      return res.json({ message: 'mensagem enviada!' })
-    }
-  } catch (erro) {
-    console.log(erro)
-    return res.status(500).json({ message: 'falha ao enciar mensagem', erro })
+    const result = await currentClient.sendText(`${number}@c.us`, message)
+    return res.json({ message: 'Message sent!' })
+  } catch (error) {
+    console.warn('Error sending message: ', (error as Error).message)
+    return res.status(500).json({
+      message: 'Message could be sent',
+      error
+    })
   }
 }
