@@ -1,6 +1,6 @@
 import { Router } from 'express'
-import { sendMessage, currentClient } from '../bot'
-import { createSession, logout, getConnectionState } from '../bot'
+import { createSession, logout, getConnectionState, sendMessage, currentClient, data } from '../bot'
+import app from "../../app";
 
 const routes = Router()
 
@@ -21,17 +21,17 @@ routes.get('/start', (req, res) => {
   initial()
 })
 
-// routes.get('/logout', (req, res) => {
-//   const logoutWpp = () => {
-//     logout().then((response) => {
-//       res.json({ response })
-//     }).catch((erro) => {
-//       res.status(500).json(erro)
-//     })
-//
-//   }
-//   logoutWpp()
-// })
+routes.get('/logout', (req, res) => {
+  const logoutWpp = () => {
+    logout().then((response) => {
+      res.json({ response })
+    }).catch((erro) => {
+      res.status(500).json(erro)
+    })
+
+  }
+  logoutWpp()
+})
 
 routes.get('/status', (req, res) => {
   if (!currentClient) {
@@ -46,6 +46,16 @@ routes.get('/status', (req, res) => {
 
   }
   getStatus()
+})
+
+routes.get('/', (req, res) => {
+  const apiKey = process.env['WHATSAPP_SERVICE_API_KEY']
+
+  if (!res.req?.query?.apiKey || !apiKey || res.req?.query?.apiKey !== apiKey) {
+    return res.status(403).json({ message: 'Not authorized' })
+  }
+
+  res.render('index', data)
 })
 
 export default routes

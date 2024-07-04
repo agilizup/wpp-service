@@ -26,16 +26,16 @@
                         <img id="qrcode" src="" alt="qrcode">
                         <h6>status: <span id="status-atual"><%= status ? status : '' %></span></h6>
                     </div>
-                    <button type="button" class="btn btn-primary"
+                    <button type="button" class="btn btn-primary d-none"
                         v-on:click="iniciarSesssao()">
                         Iniciar/Reiniciar
                     </button>
                 </div>
             </div>
             <%= session %>
-            <div class="g-col-6 g-col-md-4 col">
+            <div class="g-col-6 g-col-md-4 col d-none">
                 <div class="card p-2" style="width: 18rem;">
-                    <form @submit.prevent="enviarmensagem"  method="post" >
+                    <form @submit.prevent="enviarmensagem" method="post" >
                         <div class="card-body">
     <!--                        <h5 class="card-title">Enviar Mensagem</h5>-->
                             <h6 class="card-subtitle mb-2 text-muted">Enviar mensagem</h6>

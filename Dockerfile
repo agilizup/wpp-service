@@ -1,4 +1,4 @@
-FROM node:18-alpine
+FROM node:21-alpine3.18
 
 WORKDIR /usr/src/app
 
@@ -27,7 +27,7 @@ RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
 
 COPY . .
 
-RUN yarn install --ignore-engines
+RUN yarn install --platform=linuxmusl --arch=x64 --libc=musl
 RUN yarn tsc
 
 RUN mkdir -p /usr/src/app/tokens
