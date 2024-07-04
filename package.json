@@ -63,6 +63,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start:prod": "npx tsc && dist/server.js",
     "start": "ts-node server.ts",
+    "tsc": "tsc",
     "dev": "nodemon --exec ts-node server.ts"
   },
   "keywords": [],

@@ -1,4 +1,4 @@
-FROM node:21-alpine3.18
+FROM node:20.15.0-alpine
 
 WORKDIR /usr/src/app
 
@@ -9,15 +9,13 @@ RUN apk add --no-cache \
       freetype \
       harfbuzz \
       ca-certificates \
-      ttf-freefont \
-      nodejs \
-      yarn
+      ttf-freefont
 
 # Tell Puppeteer to skip installing Chrome. We'll be using the installed package.
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Puppeteer v13.5.0 works with Chromium 100.
-RUN yarn add puppeteer@13.5.0
+RUN npm install puppeteer@13.5.0
 
 # Add user so we don't need --no-sandbox.
 RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
@@ -27,8 +25,10 @@ RUN addgroup -S pptruser && adduser -S -G pptruser pptruser \
 
 COPY . .
 
-RUN yarn install --platform=linuxmusl --arch=x64 --libc=musl
-RUN yarn tsc
+RUN rm -rf /usr/src/app/dist /usr/src/app/tokens
+
+RUN npm install --include=optional sharp
+RUN npm run tsc
 
 RUN mkdir -p /usr/src/app/tokens
 RUN chown -R pptruser:pptruser /usr/src/app/tokens
